@@ -1,0 +1,28 @@
+.image-play {
+    position: relative;
+  }
+  
+  .image-play .icon-wrap {
+    z-index: 6;
+    position: absolute;
+    -webkit-transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+    top: 50%;
+    left: 50%;
+    width: 80px;
+    height: 80px;
+    background: #fff;
+    border-radius: 50%;
+  }
+  
+  .image-play .icon-wrap>svg {
+    font-size: 120px;
+    color: #000;
+    position: absolute;
+    -webkit-transform: translate(-35%, -50%);
+    -ms-transform: translate(-35%, -50%);
+    transform: translate(-35%, -50%);
+    top: 50%;
+    left: 50%;
+  }
