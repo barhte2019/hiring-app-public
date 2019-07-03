@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { withKeycloak } from 'react-keycloak';
 import {
   Collapse,
   Navbar,
@@ -12,7 +13,7 @@ import {
 
 import './Menu.css';
 
-export default class Menu extends Component {
+export class Menu extends Component {
 
   constructor(props) {
     super(props);
@@ -46,7 +47,7 @@ export default class Menu extends Component {
                 <NavLink href="https://github.com/reactstrap/reactstrap">GitHub</NavLink>
               </NavItem>
               <NavItem>
-                <Button color="success">Login</Button>
+                <Button color="success" onClick={() => {this.props.keycloak.login()} }>Login</Button>
               </NavItem>
             </Nav>
           </Collapse>
@@ -56,3 +57,5 @@ export default class Menu extends Component {
     );
   }
 }
+
+export default withKeycloak(Menu);
