@@ -30,29 +30,40 @@ export class Menu extends Component {
     });
   }
 
+
   render() {
+    const appsNavItem =
+      this.props.keycloak.authenticated ?
+        <NavItem>
+          <NavLink href="/applications">My Applications</NavLink>
+        </NavItem> : '';
+
+    console.log(this.props.keycloak.keycloakInitialized);
+    console.log(this.props.keycloak.authenticated);
+    const loginNavItem =
+      this.props.keycloak.authenticated ?
+        <NavItem>
+          <Button color="danger" onClick={() => { this.props.keycloak.logout() }}>Log out</Button>
+        </NavItem> :
+        <NavItem>
+          <Button color="success" onClick={() => { this.props.keycloak.login() }}>Login</Button>
+        </NavItem>
+
     return (
       <div>
-        <Navbar style={{ paddingLeft:50, paddingRight: 50, paddingTop:50, boxShadow: '0px 1px 1px #ccc'}} className="site-navbar-wrap bg-white" color="light" light expand="md" fixed="top">
+        <Navbar style={{ paddingLeft: 50, paddingRight: 50, paddingTop: 50, boxShadow: '0px 1px 1px #ccc' }} className="site-navbar-wrap bg-white" color="light" light expand="md" fixed="top">
           <NavbarBrand href="/">
             <h2 className="mb-0 site-logo">Job<strong className="font-weight-bold">Finder</strong> </h2>
           </NavbarBrand>
           <NavbarToggler onClick={this.toggle} />
           <Collapse isOpen={this.state.isOpen} navbar>
             <Nav className="ml-auto" navbar>
-              <NavItem>
-                <NavLink href="/components/">Components</NavLink>
-              </NavItem>
-              <NavItem>
-                <NavLink href="https://github.com/reactstrap/reactstrap">GitHub</NavLink>
-              </NavItem>
-              <NavItem>
-                <Button color="success" onClick={() => {this.props.keycloak.login()} }>Login</Button>
-              </NavItem>
+              {appsNavItem}
+              {loginNavItem}
             </Nav>
           </Collapse>
         </Navbar>
-        <div style={{height:150}}></div>
+        <div style={{ height: 150 }}></div>
       </div>
     );
   }

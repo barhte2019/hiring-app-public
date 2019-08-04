@@ -11,7 +11,6 @@ import PopularCategories from './components/categories/popular';
 import TopJobs from './components/top-jobs/top-jobs';
 import VideoSection from './components/video-section/video-section';
 import WhyChooseUs from './components/why-choose-us';
-import { withKeycloak } from 'react-keycloak';
 
 import {
   FaFacebook,
@@ -27,9 +26,7 @@ import './App.css';
 export class App extends Component {
   render() {
     return (
-      this.props.keycloak.authenticated
-        ? <div>testing</div> :
-        <div className="site-wrap">
+      <div className="site-wrap">
           <Menu />
           <Cover coverContent={<JobSearch />} />
           <SiteSection sectionComponent={<PopularCategories />} />
@@ -104,4 +101,4 @@ export class App extends Component {
 }
 
 //export default App;
-export default withKeycloak(App);
+export default App;
