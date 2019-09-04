@@ -37,9 +37,6 @@ export class Menu extends Component {
         <NavItem>
           <NavLink href="/applications">My Applications</NavLink>
         </NavItem> : '';
-
-    console.log(this.props.keycloak.keycloakInitialized);
-    console.log(this.props.keycloak.authenticated);
     const loginNavItem =
       this.props.keycloak.authenticated ?
         <NavItem>

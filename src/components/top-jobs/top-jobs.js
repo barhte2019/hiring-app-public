@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import Fade from 'react-reveal/Fade';
 
 import TopJobWrap from './top-job-wrap';
@@ -6,9 +6,6 @@ import TopJobWrap from './top-job-wrap';
 import './top-jobs.css';
 
 import {
-    FaHandHoldingUsd,
-    FaWrench,
-    FaBroadcastTower,
     FaPencilRuler,
     FaPlusCircle,
     FaMoneyBillAlt,
@@ -160,41 +157,21 @@ export default class TopJobs extends Component {
                 <Row>
                     <Col md={8} className="mb-3 mb-5 mb-md-0">
                         <Fade top>
-                            <h2 className="mb-5 h3">Recent Jobs</h2>
-                            <TopJobWrap
-                                possition="Restaurant Crew"
-                                company="Resto Bar"
-                                location="Florida"
-                                salary="$55000 - 70000"
-                                category="fulltime"
-                                iconComponent={<FaHandHoldingUsd className="icon mb-3 text-primary " />} />
-                            <TopJobWrap
-                                possition="JavaScript Fullstack Developer"
-                                company="Cooper"
-                                location="Remote"
-                                salary="$55000 - 70000"
-                                category="freelance"
-                                iconComponent={<FaPencilRuler className="icon mb-3 text-primary " />} />
-                            <TopJobWrap
-                                possition="ReactJS Fullstack Developer"
-                                company="Cooper"
-                                location="Remote"
-                                salary="$55000 - 70000"
-                                category="freelance"
-                                iconComponent={<FaPencilRuler className="icon mb-3 text-primary " />} />
-                            <TopJobWrap
-                                possition="Assistant Brocker"
-                                company="RealState"
-                                location="Remote"
-                                salary="$55000 - 70000"
-                                category="fulltime"
-                                iconComponent={<FaWrench className="icon mb-3 text-primary " />} />
-                            <TopJobWrap
-                                possition="Telecommunication Manager"
-                                company="RealState"
-                                location="Remote"
-                                category="partime"
-                                iconComponent={<FaBroadcastTower className="icon mb-3 text-primary " />} />
+                            <h2 className="mb-5 h3">{this.props.title}</h2>
+                            {
+                                this.props.jobIds && this.props.jobIds.length >= 1 ?
+                                this.props.jobIds.map((jobId, index) => {
+                                    return (<TopJobWrap
+                                        key={`job-wrap-${index}`}
+                                        possition="Job Title"
+                                        company="Cooper"
+                                        location="Job Location"
+                                        salary="$55000 - 70000"
+                                        category="freelance"
+                                        iconComponent={<FaPencilRuler className="icon mb-3 text-primary " />} />);
+                                }) :
+                                <div className="rounded border jobs-wrap"><h3>No results found</h3></div>
+                            }
                             <Col md={12} className="text-center mt-5">
                                 <Button ref="#" color="primary" className="rounded py-3 px-5"><FaPlusCircle /> Show More Jobs</Button>
                             </Col>

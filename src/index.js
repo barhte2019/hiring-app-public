@@ -10,6 +10,9 @@ const tokens = JSON.parse(localStorage.getItem('kcTokens') || '{}');
 
 function onKeycloakTokens(tks) {
     localStorage.setItem('kcTokens', JSON.stringify(tks));
+    setInterval(() => {
+        keycloak.updateToken(10).error(() => keycloak.logout());
+    }, 10000);
 }
 
 function onKeycloakEvent(event, error) {
