@@ -10,27 +10,14 @@ export default class TopJobWrap extends Component {
 
     borderClass (category) {
         switch(category) {
-            case 'fulltime':
+            case 'Full Time':
                 return 'info';
-            case 'freelance':
+            case 'Freelance':
                 return 'warning';
-            case 'partime':
+            case 'Part Time':
                 return 'danger';
             default:
                 return 'success'
-        }
-    }
-
-    categoryDisplayName(category) {
-        switch(category) {
-            case 'fulltime':
-                return 'Full Time';
-            case 'freelance':
-                return 'Freelance';
-            case 'partime':
-                return 'Par Time';
-            default:
-                return 'A Job'
         }
     }
 
@@ -43,7 +30,9 @@ export default class TopJobWrap extends Component {
         return (
             <div className="rounded border jobs-wrap">
                 <a href="/job-single.html" className={`job-item d-block d-md-flex align-items-center  border-bottom ${this.props.category}`}>
-                
+                <div className="company-logo blank-logo text-center text-md-left pl-3">
+                    {this.props.iconComponent}
+                </div>
                 <div className="job-details h-100">
                     <div className="p-3 align-self-center">
                         <h3>{this.props.possition}</h3>
@@ -56,7 +45,7 @@ export default class TopJobWrap extends Component {
                 </div>
                 <div className="job-category align-self-center">
                 <div className="p-3">
-                    <span className={`text-info p-2 rounded border border-${this.borderClass(this.props.category)}`}>{this.categoryDisplayName(this.props.category)}</span>
+                    <span className={`text-info p-2 rounded border border-${this.borderClass(this.props.category)}`}>{this.props.category}</span>
                 </div>
                 </div>
                 </a>

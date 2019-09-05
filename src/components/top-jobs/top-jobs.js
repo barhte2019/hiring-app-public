@@ -1,5 +1,6 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import Fade from 'react-reveal/Fade';
+import { navigate } from "@reach/router"
 
 import TopJobWrap from './top-job-wrap';
 
@@ -10,7 +11,16 @@ import {
     FaPlusCircle,
     FaMoneyBillAlt,
     FaSuitcase,
-    FaMapMarkerAlt
+    FaMapMarkerAlt,
+    FaHandHoldingUsd,
+    FaHardHat,
+    FaBroadcastTower,
+    FaStethoscope,
+    FaTruckLoading,
+    FaUserFriends,
+    FaCogs,
+    FaFileExcel,
+    FaFileSignature,
 } from 'react-icons/fa';
 
 import {
@@ -22,54 +32,22 @@ import {
     CarouselItem,
 } from 'reactstrap';
 
-const featuredJobs=[
-    {
-        "possition":"Restaurant Crew",
-        "company":"Resto Bar",
-        "location":"Florida",
-        "salary":"$55000 - 70000",
-        "category":"fulltime"
-    },
-    {
-        "possition":"JavaScript Fullstack Developer",
-        "company":"Cooper",
-        "location":"Remote",
-        "salary":"$55000 - 70000",
-        "category":"freelance"
-    },
-    {
-        "possition":"ReactJS Fullstack Developer",
-        "company":"Cooper",
-        "location":"Remote",
-        "salary":"$55000 - 70000",
-        "category":"freelance"
-    },
-    {
-        "possition":"Asistant Broker, Real Estate",
-        "company":"Realstate",
-        "location":"New York",
-        "salary":"$55000 - 70000",
-        "category":"fulltime"
-    },
-    {
-        "possition":"Telecommunication Manager",
-        "company":"Think",
-        "location":"London",
-        "category":"partime"
-    }
-];
-
 export default class TopJobs extends Component {
 
-    
+
     constructor(props) {
         super(props);
         this.state = { activeIndex: 0 };
+        this.onSearchAll = this.onSearchAll.bind(this);
         this.next = this.next.bind(this);
         this.previous = this.previous.bind(this);
         this.goToIndex = this.goToIndex.bind(this);
         this.onExiting = this.onExiting.bind(this);
         this.onExited = this.onExited.bind(this);
+    }
+
+    onSearchAll() {
+        navigate('/search');
     }
 
     onExiting() {
@@ -82,13 +60,13 @@ export default class TopJobs extends Component {
 
     next() {
         if (this.animating) return;
-        const nextIndex = this.state.activeIndex === featuredJobs.length - 1 ? 0 : this.state.activeIndex + 1;
+        const nextIndex = this.state.activeIndex === this.props.jobIds.length - 1 ? 0 : this.state.activeIndex + 1;
         this.setState({ activeIndex: nextIndex });
     }
 
     previous() {
         if (this.animating) return;
-        const nextIndex = this.state.activeIndex === 0 ? featuredJobs.length - 1 : this.state.activeIndex - 1;
+        const nextIndex = this.state.activeIndex === 0 ? this.props.jobIds.length - 1 : this.state.activeIndex - 1;
         this.setState({ activeIndex: nextIndex });
     }
 
@@ -97,8 +75,8 @@ export default class TopJobs extends Component {
         this.setState({ activeIndex: newIndex });
     }
 
-    borderClass (category) {
-        switch(category) {
+    borderClass(category) {
+        switch (category) {
             case 'fulltime':
                 return 'info';
             case 'freelance':
@@ -111,7 +89,7 @@ export default class TopJobs extends Component {
     }
 
     categoryDisplayName(category) {
-        switch(category) {
+        switch (category) {
             case 'fulltime':
                 return 'Full Time';
             case 'freelance':
@@ -124,33 +102,82 @@ export default class TopJobs extends Component {
     }
 
     showSalary(salary) {
-        if(salary)
-        return (<span> <FaMoneyBillAlt className="mr-1" /> {salary}</span>);
+        if (salary)
+            return (<span> <FaMoneyBillAlt className="mr-1" /> {salary}</span>);
     }
 
     render() {
         const { activeIndex } = this.state;
+        const {jobIds, jobDetails, hideSearchAll} = this.props;
 
-        const slides = featuredJobs.map((item, index)=> {
-            return(
+        const minMaxSalary = (jobId) => {
+            const min = jobDetails[jobId] ? jobDetails[jobId].salaryMin : 0;
+            const max = jobDetails[jobId] ? jobDetails[jobId].salaryMax : 0;
+
+            return '$' + min.toLocaleString() + ' - ' + max.toLocaleString();
+        }
+
+        const slides = jobIds && jobIds.length >= 1 ?
+            jobIds.map((jobId, index) => (
                 <CarouselItem
                     onExiting={this.onExiting}
                     onExited={this.onExited}
                     key={`featured-job-${index}`}>
                     <div className="border rounded p-4 bg-white">
-                        <h2 className="h5">{item.possition}</h2>
-                        <p><span className={`border border-${this.borderClass(item.category)} rounded p-1 px-2 text-${this.borderClass(item.category)}`}>Freelance</span></p>
+                        <h2 className="h5">{jobDetails[jobId] ? jobDetails[jobId].jobTitle : 'loading'}</h2>
+                        <p><span className={`border border-${this.borderClass(jobDetails[jobId] ? jobDetails[jobId].jobType : 'loading')} rounded p-1 px-2 text-${this.borderClass(jobDetails[jobId] ? jobDetails[jobId].jobType : 'loading')}`}>{jobDetails[jobId] ? jobDetails[jobId].jobType : 'loading'}</span></p>
                         <p>
-                        <span className="d-block"><FaSuitcase className="mr-1" /> {item.company}</span>
-                        <span className="d-block"><FaMapMarkerAlt /> {item.location}</span>
-                        <span className="d-block">{this.showSalary(item.salary)}</span>
+                            <span className="d-block"><FaSuitcase className="mr-1" /> {jobDetails[jobId] ? jobDetails[jobId].jobCategory : 'loading'}</span>
+                            <span className="d-block"><FaMapMarkerAlt /> {jobDetails[jobId] ? jobDetails[jobId].location : 'loading'}</span>
+                            <span className="d-block">{this.showSalary(minMaxSalary(jobId))}</span>
                         </p>
-                        <p className="mb-0">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Animi neque fugit tempora, numquam voluptate veritatis odit id, iste eum culpa alias, ut officiis omnis itaque ad, rem sunt doloremque molestias.</p>
+                        <p className="mb-0">{jobDetails[jobId] ? jobDetails[jobId].jobDescription : 'loading'}</p>
                         <Button color="primary">Apply Now</Button>
                     </div>
                 </CarouselItem>
-            );
-        });
+            )) : [<CarouselItem
+                onExiting={this.onExiting}
+                onExited={this.onExited}
+                key={`featured-job-empty`}>
+                <div className="border rounded p-4 bg-white">
+                    <h2 className="h5">No Jobs Available</h2>
+                    <p className="mb-0">Come back later and find interesting open positions in our company.</p>
+                </div>
+            </CarouselItem>];
+
+        const iconComponent = (jobCategory) => {
+            switch (jobCategory) {
+                case "Accounting / Finance":
+                    return <FaHandHoldingUsd className="icon mb-3 text-primary " />
+                case "Construction / Facilities":
+                    return <FaHardHat className="icon mb-3 text-primary " />
+                case "Desig, Art & Multimedia":
+                    return <FaPencilRuler className="icon mb-3 text-primary " />
+                case "Healthcare":
+                    return <FaStethoscope className="icon mb-3 text-primary " />
+                case "Human Resources":
+                    return <FaUserFriends className="icon mb-3 text-primary " />
+                case "Operations":
+                    return <FaCogs className="icon mb-3 text-primary " />
+                case "Project Manager":
+                    return <FaFileExcel className="icon mb-3 text-primary " />
+                case "Team Manager":
+                    return <FaFileSignature className="icon mb-3 text-primary " />
+                case "Telecomunications":
+                    return <FaBroadcastTower className="icon mb-3 text-primary " />
+                case "Transportation & Logistics":
+                    return <FaTruckLoading className="icon mb-3 text-primary " />
+                default: return <FaCogs className="icon mb-3 text-primary " />
+            }
+        }
+
+        const searchAllButton = hideSearchAll ? '' :
+            <Col md={12} className="text-center mt-5">
+                <Button
+                    color="primary"
+                    className="rounded py-3 px-5"
+                    onClick={this.onSearchAll}><FaPlusCircle /> Show More Jobs</Button>
+            </Col>;
 
         return (
             <Container>
@@ -159,22 +186,20 @@ export default class TopJobs extends Component {
                         <Fade top>
                             <h2 className="mb-5 h3">{this.props.title}</h2>
                             {
-                                this.props.jobIds && this.props.jobIds.length >= 1 ?
-                                this.props.jobIds.map((jobId, index) => {
-                                    return (<TopJobWrap
-                                        key={`job-wrap-${index}`}
-                                        possition={this.props.jobDetails[jobId]?this.props.jobDetails[jobId].jobTitle:'loading'}
-                                        company="Cooper"
-                                        location={this.props.jobDetails[jobId]?this.props.jobDetails[jobId].location:'loading'}
-                                        salary="$55000 - 70000"
-                                        category="freelance"
-                                        iconComponent={<FaPencilRuler className="icon mb-3 text-primary " />} />);
-                                }) :
-                                <div className="rounded border jobs-wrap"><h3>No results found</h3></div>
+                                jobIds && jobIds.length >= 1 ?
+                                    jobIds.map((jobId, index) => {
+                                        return (<TopJobWrap
+                                            key={`job-wrap-${index}`}
+                                            possition={jobDetails[jobId] ? jobDetails[jobId].jobTitle : 'loading'}
+                                            company={jobDetails[jobId] ? jobDetails[jobId].jobCategory : 'loading'}
+                                            location={jobDetails[jobId] ? jobDetails[jobId].location : 'loading'}
+                                            salary={minMaxSalary(jobId)}
+                                            category={jobDetails[jobId] ? jobDetails[jobId].jobType : 'loading'}
+                                            iconComponent={iconComponent(jobDetails[jobId] ? jobDetails[jobId].jobCategory : 'loading')} />);
+                                    }) :
+                                    <div className="rounded border jobs-wrap"><h3>No results found</h3></div>
                             }
-                            <Col md={12} className="text-center mt-5">
-                                <Button ref="#" color="primary" className="rounded py-3 px-5"><FaPlusCircle /> Show More Jobs</Button>
-                            </Col>
+                            {searchAllButton}
                         </Fade>
                     </Col>
                     <Col md={4} className="block-16">
@@ -189,7 +214,7 @@ export default class TopJobs extends Component {
                                 activeIndex={activeIndex}
                                 next={this.next}
                                 previous={this.previous}>
-                                    {slides}
+                                {slides}
                             </Carousel>
                         </Fade>
                     </Col>

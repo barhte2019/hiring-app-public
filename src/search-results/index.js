@@ -51,7 +51,8 @@ export class SearchResultsPage extends Component {
                 <TopJobs
                     title="Search Results"
                     jobIds={this.state.jobIds} 
-                    jobDetails={this.state.list} />);
+                    jobDetails={this.state.list}
+                    hideSearchAll={true} />);
             renderable = <SiteSection
                 className="bg-light"
                 sectionComponent={jobsListing} />

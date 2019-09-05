@@ -38,7 +38,7 @@ export class JobSearch extends Component {
 
     onSearchClick() {
         if (this.props.keycloak.authenticated) {
-            navigate(`/search/?title=${this.state.jobTitle}&location=${this.state.jobLocation}`)
+            navigate(`/search?title=${this.state.jobTitle}&location=${this.state.jobLocation}`)
         } else {
             this.props.keycloak.login();
         }
