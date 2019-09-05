@@ -43,9 +43,7 @@ export default class TopJobWrap extends Component {
         return (
             <div className="rounded border jobs-wrap">
                 <a href="/job-single.html" className={`job-item d-block d-md-flex align-items-center  border-bottom ${this.props.category}`}>
-                <div className="company-logo blank-logo text-center text-md-left pl-3">
-                    {this.props.iconComponent}
-                </div>
+                
                 <div className="job-details h-100">
                     <div className="p-3 align-self-center">
                         <h3>{this.props.possition}</h3>

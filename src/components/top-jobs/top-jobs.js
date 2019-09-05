@@ -163,9 +163,9 @@ export default class TopJobs extends Component {
                                 this.props.jobIds.map((jobId, index) => {
                                     return (<TopJobWrap
                                         key={`job-wrap-${index}`}
-                                        possition="Job Title"
+                                        possition={this.props.jobDetails[jobId]?this.props.jobDetails[jobId].jobTitle:'loading'}
                                         company="Cooper"
-                                        location="Job Location"
+                                        location={this.props.jobDetails[jobId]?this.props.jobDetails[jobId].location:'loading'}
                                         salary="$55000 - 70000"
                                         category="freelance"
                                         iconComponent={<FaPencilRuler className="icon mb-3 text-primary " />} />);

@@ -33,7 +33,7 @@ export class SearchResultsPage extends Component {
                                 this.setState({
                                     list: {
                                         ...this.state.list,
-                                        [jobId]: jobDetailResponse.data.hiringPetition['com.myspace.hr_hiring.HiringPetition']
+                                        [jobId]: jobDetailResponse.data.hiringPetition
                                     }
                                 });
                             })
