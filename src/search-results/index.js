@@ -57,10 +57,10 @@ export class SearchResultsPage extends Component {
                 className="bg-light"
                 sectionComponent={jobsListing} />
         } else {
-            renderable = <div>
+            renderable = <SiteSection className='bg-light'>
                 <h2 className="text-center" style={{ paddingTop: 80, paddingBottom: 80 }}>
                     Please login so you can search for jobs
-                </h2></div>
+                </h2></SiteSection>
         }
 
         return (renderable)

@@ -14,6 +14,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
 import HomePage from './home';
 import SearchResultsPage from './search-results';
+import JobApplyPage from './job-apply';
 
 export default class App extends Component {
 
@@ -24,6 +25,7 @@ export default class App extends Component {
         <Router>
           <HomePage path="/" />
           <SearchResultsPage path="search" />
+          <JobApplyPage path="apply/:jobId" />
         </Router>
         <footer className="site-footer">
           <div className="container">

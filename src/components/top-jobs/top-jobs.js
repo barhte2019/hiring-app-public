@@ -50,6 +50,7 @@ export default class TopJobs extends Component {
         navigate('/search');
     }
 
+
     onExiting() {
         this.animating = true;
     }
@@ -88,19 +89,6 @@ export default class TopJobs extends Component {
         }
     }
 
-    categoryDisplayName(category) {
-        switch (category) {
-            case 'fulltime':
-                return 'Full Time';
-            case 'freelance':
-                return 'Freelance';
-            case 'partime':
-                return 'Par Time';
-            default:
-                return 'A Job'
-        }
-    }
-
     showSalary(salary) {
         if (salary)
             return (<span> <FaMoneyBillAlt className="mr-1" /> {salary}</span>);
@@ -108,13 +96,13 @@ export default class TopJobs extends Component {
 
     render() {
         const { activeIndex } = this.state;
-        const {jobIds, jobDetails, hideSearchAll} = this.props;
+        const { jobIds, jobDetails, hideSearchAll } = this.props;
 
         const minMaxSalary = (jobId) => {
-            const min = jobDetails[jobId] ? jobDetails[jobId].salaryMin : 0;
-            const max = jobDetails[jobId] ? jobDetails[jobId].salaryMax : 0;
+            const min = jobDetails[jobId] && jobDetails[jobId].salaryMin ? jobDetails[jobId].salaryMin.toLocaleString() : 0;
+            const max = jobDetails[jobId] && jobDetails[jobId].salaryMax ? jobDetails[jobId].salaryMax.toLocaleString() : 0;
 
-            return '$' + min.toLocaleString() + ' - ' + max.toLocaleString();
+            return '$' + min + ' - ' + max;
         }
 
         const slides = jobIds && jobIds.length >= 1 ?
@@ -132,7 +120,7 @@ export default class TopJobs extends Component {
                             <span className="d-block">{this.showSalary(minMaxSalary(jobId))}</span>
                         </p>
                         <p className="mb-0">{jobDetails[jobId] ? jobDetails[jobId].jobDescription : 'loading'}</p>
-                        <Button color="primary">Apply Now</Button>
+                        <Button onClick={() => { navigate('/apply/' + jobId) }} color="primary">Apply Now</Button>
                     </div>
                 </CarouselItem>
             )) : [<CarouselItem
@@ -195,7 +183,8 @@ export default class TopJobs extends Component {
                                             location={jobDetails[jobId] ? jobDetails[jobId].location : 'loading'}
                                             salary={minMaxSalary(jobId)}
                                             category={jobDetails[jobId] ? jobDetails[jobId].jobType : 'loading'}
-                                            iconComponent={iconComponent(jobDetails[jobId] ? jobDetails[jobId].jobCategory : 'loading')} />);
+                                            iconComponent={iconComponent(jobDetails[jobId] ? jobDetails[jobId].jobCategory : 'loading')}
+                                            jobId={jobId} />);
                                     }) :
                                     <div className="rounded border jobs-wrap"><h3>No results found</h3></div>
                             }
