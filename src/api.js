@@ -29,7 +29,7 @@ export default {
     ),
   },
   jobs: {
-    apply: (caseData, owner) => {
+    apply: (caseData, jobOwner, applicant) => {
       return api().post(
         '/services/rest/server/containers/hr-hiring/cases/com.myspace.hr_hiring.hiring-case-definition/instances',
         {
@@ -40,7 +40,7 @@ export default {
             "benefits-compensation": "talent-acquisition",
             "talent-acquisition": "talent-acquisition"
           },
-          "case-user-assignments": { "owner": owner },
+          "case-user-assignments": { "owner": applicant, "job_request_manager": jobOwner},
         }
       );
     },

@@ -80,18 +80,19 @@ export class JobApplyPage extends Component {
         const { caseDetail, jobDetails, reportedSkills } = this.state;
 
         event.preventDefault();
-        this.setState({ ...this.state, loading: true })
+        this.setState({ ...this.state, loading: true });
+        const applicant = keycloak.tokenParsed ? keycloak.tokenParsed['preferred_username'] : keycloak.subject;
         const caseData = {
-            'internal': false,
+            'internal': true,
             'jobApplication': {
-                'internal': false,
-                'applicantName': keycloak.tokenParsed ? keycloak.tokenParsed['preferred_username'] : keycloak.subject,
+                'internal': true,
+                'applicantName': applicant,
                 'skills': Object.keys(reportedSkills).map(k => { return { 'skillName': k, 'levelOfKnowledge': reportedSkills[k].levelOfKnowledge, 'yearsOfExperience': reportedSkills[k].yearsOfExperience } }),
                 'jobIdRef': jobId,
                 'jobTitle': jobDetails.jobTitle
             },
         }
-        api.jobs.apply(caseData, caseDetail['case-owner']).then(response => {
+        api.jobs.apply(caseData, caseDetail['case-owner'], applicant).then(response => {
             this.setState({ ...this.state, loading: false })
             navigate('/applications');
         }).catch(err => {
