@@ -15,6 +15,7 @@ import './App.css';
 import HomePage from './home';
 import SearchResultsPage from './search-results';
 import JobApplyPage from './job-apply';
+import ApplicationsListPage from './applications';
 
 export default class App extends Component {
 
@@ -26,6 +27,7 @@ export default class App extends Component {
           <HomePage path="/" />
           <SearchResultsPage path="search" />
           <JobApplyPage path="apply/:jobId" />
+          <ApplicationsListPage path="applications" />
         </Router>
         <footer className="site-footer">
           <div className="container">
