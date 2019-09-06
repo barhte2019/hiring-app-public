@@ -6,7 +6,10 @@
     "@reach/router": "^1.2.1",
     "axios": "^0.19.0",
     "bootstrap": "^4.3.1",
+    "jquery": "^3.4.1",
     "keycloak-js": "^6.0.1",
+    "popper.js": "^1.15.0",
+    "prop-types": "^15.7.2",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
     "react-icons": "^3.7.0",
@@ -15,7 +18,8 @@
     "react-reveal": "^1.2.2",
     "react-scripts": "3.0.1",
     "react-transition-group": "^4.1.0",
-    "reactstrap": "^8.0.0"
+    "reactstrap": "^8.0.0",
+    "typescript": "^3.6.2"
   },
   "scripts": {
     "start": "chmod +x ./env.sh && ./env.sh && cp env-config.js ./public/ && react-scripts start",
