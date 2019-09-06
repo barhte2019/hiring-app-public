@@ -22,14 +22,14 @@ export class SearchResultsPage extends Component {
                 const jobIds = jobListResponse.data.instances.map(instance => instance['case-id']);
 
                 jobIds.forEach(jobId => {
-                    api.jobs.milestones(jobId).then(jobMilestoneResponse => {
+                    api.cases.milestones(jobId).then(jobMilestoneResponse => {
                         if (jobMilestoneResponse.data.milestones.length === 1) {
                             const filteredJobIds = this.state.jobIds;
                             filteredJobIds.push(jobId);
                             this.setState(
                                 { jobIds: filteredJobIds, }
                             )
-                            api.jobs.detail(jobId).then(jobDetailResponse => {
+                            api.cases.caseFile(jobId).then(jobDetailResponse => {
                                 this.setState({
                                     list: {
                                         ...this.state.list,

@@ -53,12 +53,12 @@ export class JobApplyPage extends Component {
 
     componentDidMount() {
         const { jobId } = this.props;
-        api.jobs.detail(jobId).then(response => {
+        api.cases.caseFile(jobId).then(response => {
             this.setState({
                 jobDetails: response.data.hiringPetition,
                 requestedSkills: response.data.requestedSkills.map(item => ({ ...item['com.myspace.hr_hiring.CandidateSkill'] }))
             });
-            api.jobs.case(jobId).then(caseResponse => {
+            api.cases.caseDetail(jobId).then(caseResponse => {
                 this.setState({
                     caseDetail: caseResponse.data
                 })

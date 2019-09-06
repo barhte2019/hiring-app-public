@@ -28,6 +28,22 @@ export default {
       }
     ),
   },
+  cases: {
+    caseDetail: (caseId) => {
+      const url = 'services/rest/server/containers/hr-hiring/cases/instances/' + caseId;
+      return api().get(url);
+    },
+    caseFile: (caseId) => {
+      const url = 'services/rest/server/containers/hr-hiring/cases/instances/' + caseId + '/caseFile';
+      return api().get(url);
+    },
+    milestones: (caseId) => {
+      const url = 'services/rest/server/containers/hr-hiring/cases/instances/' + caseId + '/milestones';
+      return api().get(url, {
+        params: { 'achievedOnly': true, page: 0, 'page-size': 10, }
+      })
+    }
+  },
   jobs: {
     apply: (caseData, jobOwner, applicant) => {
       return api().post(
@@ -40,18 +56,9 @@ export default {
             "benefits-compensation": "talent-acquisition",
             "talent-acquisition": "talent-acquisition"
           },
-          "case-user-assignments": { "owner": applicant, "job_request_manager": jobOwner},
+          "case-user-assignments": { "owner": applicant, "job_request_manager": jobOwner },
         }
       );
-    },
-    case: (jobId) => {
-      const url = 'services/rest/server/containers/hr-hiring/cases/instances/' + jobId;
-      return api().get(url);
-    },
-    detail: (jobId) => {
-      // services/rest/server/containers/hr-hiring/cases/instances/JOB-0000000001/caseFile?name=hiringPetition
-      const url = 'services/rest/server/containers/hr-hiring/cases/instances/' + jobId + '/caseFile';
-      return api().get(url);
     },
     list: (page, pageSize) => api().get(
       'services/rest/server/containers/hr-hiring/cases/com.myspace.hr_hiring.job-vacancy-lifecycle/instances',
@@ -61,13 +68,7 @@ export default {
           'page_size': pageSize
         }
       }
-    ),
-    milestones: (jobId) => {
-      const url = 'services/rest/server/containers/hr-hiring/cases/instances/' + jobId + '/milestones';
-      return api().get(url, {
-        params: { 'achievedOnly': true, page: 0, 'page-size': 10, }
-      })
-    }
+    )
   },
   process: {
     byCorrelationKey: (correlationKey) => {
