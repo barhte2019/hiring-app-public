@@ -115,12 +115,13 @@ export class ApplicationsListPage extends Component {
     }
 
     render() {
+        const { keycloak } = this.props;
         const { applications, caseDetails, processInstances, caseStatus } = this.state;
 
         const loadingComponent = () => {
             return (<span>Loading ...</span>)
         }
-        return (<div className='bg-light'>
+        return keycloak.authenticated ? (<div className='bg-light'>
             <h3>Submitted job applications</h3>
             <Table>
                 <thead>
@@ -164,7 +165,13 @@ export class ApplicationsListPage extends Component {
                         onError={loadingComponent} />
                 </ModalBody>
             </Modal>
-        </div >);
+        </div >)
+        :
+        <div className='site-sectin bg-light'>
+            <h2 className="text-center" style={{ paddingTop: 80, paddingBottom: 80 }}>
+                Please login so you can apply for jobs
+            </h2>
+        </div>;
     }
 }
 

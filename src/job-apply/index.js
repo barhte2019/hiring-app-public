@@ -56,7 +56,13 @@ export class JobApplyPage extends Component {
         api.cases.caseFile(jobId).then(response => {
             this.setState({
                 jobDetails: response.data.hiringPetition,
-                requestedSkills: response.data.requestedSkills.map(item => ({ ...item['com.myspace.hr_hiring.CandidateSkill'] }))
+                requestedSkills: response.data.requestedSkills.map(item => {
+                    if (item['com.myspace.hr_hiring.CandidateSkill']) {
+                        return { ...item['com.myspace.hr_hiring.CandidateSkill'] }
+                    } else {
+                        return { ...item }
+                    }
+                })
             });
             api.cases.caseDetail(jobId).then(caseResponse => {
                 this.setState({
