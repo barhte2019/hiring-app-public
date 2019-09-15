@@ -25,6 +25,7 @@ export class JobApplyPage extends Component {
             jobDetails: {},
             requestedSkills: [],
             reportedSkills: {},
+            interviewerAssignments: [],
             loading: false,
         }
 
@@ -55,6 +56,13 @@ export class JobApplyPage extends Component {
         const { jobId } = this.props;
         api.cases.caseFile(jobId).then(response => {
             this.setState({
+                interviewerAssignments: response.data.interviewerAssignments.map(item => {
+                    if (item['com.myspace.hr_hiring.InterviewerAssignment']) {
+                        return { ...item['com.myspace.hr_hiring.InterviewerAssignment'] }
+                    } else {
+                        return { ...item }
+                    }
+                }),
                 jobDetails: response.data.hiringPetition,
                 requestedSkills: response.data.requestedSkills.map(item => {
                     if (item['com.myspace.hr_hiring.CandidateSkill']) {
@@ -83,13 +91,22 @@ export class JobApplyPage extends Component {
 
     jobApplyFormSubmit(event) {
         const { keycloak, jobId } = this.props;
-        const { caseDetail, jobDetails, reportedSkills } = this.state;
+        const { caseDetail, jobDetails, reportedSkills, interviewerAssignments } = this.state;
 
         event.preventDefault();
         this.setState({ ...this.state, loading: true });
         const applicant = keycloak.tokenParsed ? keycloak.tokenParsed['preferred_username'] : keycloak.subject;
         const caseData = {
             'internal': true,
+            'interviewerAppointments': interviewerAssignments
+                .map(i => {
+                    return { 'com.myspace.hr_hiring.InterviewAppointment': {
+                        comment: i.comment,
+                        interviewDurationMinutes: 0,
+                        interviewee: applicant,
+                        interviewer: i.interviewerName
+                    }}
+                }),
             'jobApplication': {
                 'internal': true,
                 'applicantName': applicant,
