@@ -119,7 +119,6 @@ export class JobApplyPage extends Component {
             this.setState({ ...this.state, loading: false })
             navigate('/applications');
         }).catch(err => {
-            console.log(err);
             this.setState({ ...this.state, loading: false })
         })
     }
