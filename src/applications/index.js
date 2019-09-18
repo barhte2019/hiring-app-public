@@ -21,14 +21,19 @@ export class ApplicationsListPage extends Component {
             processInstances: {},
             modal: false,
             selectedProcessId: 0,
-            selectedJob: ''
+            selectedJob: '',
+            acceptJobModal: false,
         }
 
+        this.listJobs = this.listJobs.bind(this);
         this.toggle = this.toggle.bind(this);
         this.openProcessImage = this.openProcessImage.bind(this);
+        this.acceptJobOffer = this.acceptJobOffer.bind(this);
+
+        this.toggleAcceptJob = this.toggleAcceptJob.bind(this);
     }
 
-    componentDidMount() {
+    listJobs() {
         api.applications.list().then(response => {
             if (response.data.instances) {
                 this.setState({ applications: response.data.instances });
@@ -52,7 +57,9 @@ export class ApplicationsListPage extends Component {
                                         ...this.state.caseDetails,
                                         [i['case-id']]: {
                                             ...this.state.caseDetails[i['case-id']],
-                                            location: jobDetailResponse.data.hiringPetition.location
+                                            location: jobDetailResponse.data.hiringPetition.location,
+                                            salary: jobDetailResponse.data.hiringPetition.salaryMax,
+                                            benefits: jobDetailResponse.data.offeredBenefits
                                         }
                                     }
                                 })
@@ -104,14 +111,41 @@ export class ApplicationsListPage extends Component {
         })
     }
 
+    componentDidMount() {
+        this.listJobs();
+    }
+
     toggle() {
         this.setState(prevState => ({
             modal: !prevState.modal
         }))
     }
 
+    toggleAcceptJob() {
+        this.setState(prevState => ({ acceptJobModal: !prevState.acceptJobModal }));
+    }
+
     openProcessImage(selectedProcessId, selectedJob) {
         this.setState({ selectedProcessId, modal: true, selectedJob });
+    }
+
+    openAcceptJobModal(selectedProcessId, selectedJob) {
+        this.setState({ selectedProcessId, acceptJobModal: true, selectedJob });
+    }
+
+    acceptJobOffer() {
+        api.tasks.listMine()
+            .then(response => {
+                const selectedTask = response.data['task-summary'].find(p => p['task-proc-inst-id'] === this.state.selectedProcessId);
+                if (selectedTask) {
+                    const taskId = selectedTask['task-id'];
+                    api.tasks.complete(taskId, { "jobOfferAccepted": true })
+                        .then(r => {
+                            this.listJobs();
+                            this.toggleAcceptJob();
+                        });
+                }
+            });
     }
 
     render() {
@@ -144,9 +178,15 @@ export class ApplicationsListPage extends Component {
                                 <Button
                                     color="link"
                                     onClick={() => {
-                                        this.openProcessImage(
-                                            processInstances[a['case-id']] && processInstances[a['case-id']].id ? processInstances[a['case-id']].id : 0,
-                                            a['case-id']);
+                                        const status = caseStatus[a['case-id']] && caseStatus[a['case-id']].status ? caseStatus[a['case-id']].status : 'loading';
+                                        if (status === 'Waiting for your response') {
+                                            this.openAcceptJobModal(processInstances[a['case-id']] && processInstances[a['case-id']].id ? processInstances[a['case-id']].id : 0,
+                                                a['case-id']);
+                                        } else {
+                                            this.openProcessImage(
+                                                processInstances[a['case-id']] && processInstances[a['case-id']].id ? processInstances[a['case-id']].id : 0,
+                                                a['case-id']);
+                                        }
                                     }}>
                                     {caseStatus[a['case-id']] && caseStatus[a['case-id']].status ? caseStatus[a['case-id']].status : 'loading'}
                                 </Button>
@@ -165,13 +205,27 @@ export class ApplicationsListPage extends Component {
                         onError={loadingComponent} />
                 </ModalBody>
             </Modal>
+            <Modal isOpen={this.state.acceptJobModal} size='md'>
+                <ModalHeader toggle={this.toggleAcceptJob}>Job Offer details</ModalHeader>
+                <ModalBody>
+                    <p><b>Application: </b>{this.state.selectedJob}</p>
+                    <p>Please accept the following job offer and we will wait for you in the office:</p>
+                    <p><b>Salary: </b>$ {caseDetails[this.state.selectedJob] && caseDetails[this.state.selectedJob].salary ? caseDetails[this.state.selectedJob].salary : 'loading'}</p>
+                    <p><b>Benefits: </b></p><ul>
+                        {caseDetails[this.state.selectedJob] && caseDetails[this.state.selectedJob].benefits && caseDetails[this.state.selectedJob].benefits.map((b, index) => {
+                            return (<li key={`benefit-${index}`}><b>{b.benefitName}</b>: {b.benefitDescription}</li>)
+                        })}
+                    </ul>
+                    <Button color='success' onClick={this.acceptJobOffer}>Accept</Button>
+                </ModalBody>
+            </Modal>
         </div >)
-        :
-        <div className='site-sectin bg-light'>
-            <h2 className="text-center" style={{ paddingTop: 80, paddingBottom: 80 }}>
-                Please login so you can apply for jobs
+            :
+            <div className='site-sectin bg-light'>
+                <h2 className="text-center" style={{ paddingTop: 80, paddingBottom: 80 }}>
+                    Please login so you can apply for jobs
             </h2>
-        </div>;
+            </div>;
     }
 }
 

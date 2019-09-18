@@ -87,6 +87,12 @@ export default {
       }
       else { return undefined };
     },
+    signal: (id, signalName, data) => {
+      return api().post(
+        '/services/rest/server/containers/hr-hiring/processes/instances/signal/' + signalName,
+        data
+      )
+    }
   },
   tasks: {
     complete: (id, output) => api().put(
