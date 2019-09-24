@@ -54,7 +54,8 @@ export default {
           },
           "case-group-assignments": {
             "benefits-compensation": "talent-acquisition",
-            "talent-acquisition": "talent-acquisition"
+            "talent-acquisition": "talent-acquisition",
+            "interviewer": "interviewer"
           },
           "case-user-assignments": { "owner": applicant, "job_request_manager": jobOwner },
         }
